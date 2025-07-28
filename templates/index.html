@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarah - Personal AI Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="sarah-avatar">
+                            <i class="fas fa-robot"></i>
+                            <div class="pulse-ring"></div>
+                        </div>
+                        <div class="logo-text">
+                            <h1>Sarah</h1>
+                            <p>Your Personal Assistant</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Language Toggle -->
+                    <div class="language-toggle">
+                        <div class="toggle-container">
+                            <span class="toggle-label">English</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="language-toggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-label">ಕನ್ನಡ</span>
+                        </div>
+                        <div class="current-language" id="current-language">English Mode</div>
+                    </div>
+                    
+                    <div class="header-info">
+                        <div class="datetime-display">
+                            <div class="date" id="current-date"></div>
+                            <div class="time" id="current-time"></div>
+                        </div>
+                        <div class="session-info">
+                            <span id="session-status">Ready</span>
+                            <div class="status-indicator" id="status-indicator"></div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Chat Container -->
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="welcome-message">
+                        <div class="sarah-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <p>Hey Lucifer! 👋 I'm Sarah, your personal assistant. Say "Hey Sarah" to start talking with me! 😊</p>
+                                <span class="timestamp">Just now</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voice Controls -->
+                <div class="voice-controls">
+                    <div class="voice-visualizer" id="voice-visualizer">
+                        <div class="wave-container">
+                            <div class="wave"></div>
+                            <div class="wave"></div>
+                            <div class="wave"></div>
+                            <div class="wave"></div>
+                            <div class="wave"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-buttons">
+                        <button class="voice-btn" id="start-voice-btn">
+                            <i class="fas fa-microphone"></i>
+                            <span>Start Listening</span>
+                        </button>
+                        <button class="stop-btn" id="stop-voice-btn" style="display: none;">
+                            <i class="fas fa-stop"></i>
+                            <span>Stop</span>
+                        </button>
+                    </div>
+
+                    <div class="voice-status" id="voice-status">
+                        <p>Click "Start Listening" and say "Hey Sarah" to begin</p>
+                    </div>
+                </div>
+
+                <!-- Text Input (Backup) -->
+                <div class="text-input-container">
+                    <div class="input-group">
+                        <input type="text" id="text-input" placeholder="Type your message here (or use voice)..." />
+                        <button id="send-text-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Settings Panel -->
+                <div class="settings-panel">
+                    <h3><i class="fas fa-cog"></i> Settings</h3>
+                    
+                    <!-- System Prompts -->
+                    <div class="setting-section">
+                        <h4>Custom System Prompts</h4>
+                        <div class="prompt-input">
+                            <textarea id="custom-prompt" placeholder="Add additional personality traits or instructions for Sarah..."></textarea>
+                            <button id="add-prompt-btn">Add Prompt</button>
+                        </div>
+                        <div class="active-prompts" id="active-prompts">
+                            <!-- Dynamic prompts will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Voice Settings -->
+                    <div class="setting-section">
+                        <h4>Voice Settings</h4>
+                        <div class="voice-settings">
+                            <label>
+                                <input type="checkbox" id="auto-speak" checked>
+                                Auto-speak responses
+                            </label>
+                            <label>
+                                <input type="range" id="speech-rate" min="0.5" max="2" step="0.1" value="1">
+                                Speech Rate: <span id="rate-value">1.0</span>
+                            </label>
+                            <label>
+                                <input type="range" id="speech-volume" min="0" max="1" step="0.1" value="0.8">
+                                Volume: <span id="volume-value">0.8</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Session Controls -->
+                    <div class="setting-section">
+                        <h4>Session</h4>
+                        <div class="session-controls">
+                            <button id="new-session-btn" class="secondary-btn">
+                                <i class="fas fa-plus"></i> New Session
+                            </button>
+                            <button id="clear-history-btn" class="danger-btn">
+                                <i class="fas fa-trash"></i> Clear History
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loading-overlay">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Sarah is thinking...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Element for TTS -->
+    <audio id="tts-audio" preload="auto"></audio>
+
+    <script src="{{ url_for('static', filename='/js/script.js') }}"></script>
+</body>
+</html>
