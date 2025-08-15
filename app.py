@@ -5,11 +5,14 @@ import requests
 import json
 import re
 import os
+from dotenv import load_dotenv
 from datetime import datetime
 import io
 import base64
 from gtts import gTTS
 import uuid
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)

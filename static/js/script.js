@@ -271,7 +271,7 @@ class SarahAssistant {
         this.updateStatus('Processing...');
         
         try {
-            const response = await fetch('/chat', {
+            const response = await fetch('https://sara-personal-assistant.onrender.com/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
